@@ -1,13 +1,11 @@
-========
-mux_init
-========
-All this does is initialize the mux and get it to point to a channel (channel 0) on startup.
-It gets called in main.
-Returns a bool to signal whether it succeeded or not.
+# MuxDriver
 
-==========
-mux_select
-==========
-Currently bus_id is not being used.
-channel is being passed and used to specify the mask for the mux.
-The mask is a byte that specifies the channel to use on the mux and gets the mux to point to it with i2c_write.
+**Purpose:** Control the **TCA9548A** I2C multiplexer (**address `0x70`**): init (all channels off) and select one channel.
+
+**Primary files:** `muxdriver.h`, `muxdriver.cpp`
+
+**API:** `mux_init()`, `mux_select(bus_id, mux_channel)` — `bus_id` reserved for future multi-bus use.
+
+**Used by:** Teensy DAQ and sensor init paths.
+
+**Documentation:** [Configuration headers](../../docs/reference/configuration-headers.md) · [Library index](../../docs/libraries/index.md)

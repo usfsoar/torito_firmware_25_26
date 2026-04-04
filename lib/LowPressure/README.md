@@ -1,15 +1,9 @@
-====================
-PressureSensor::init
-====================
-Member function whose job is to initialize the PressureSensor class and get it to point to the correct i2c_address
+# LowPressure
 
-!!!Currently it is hardcoded and will need to be rewritten to accept the address from sensorconfig. This will require a bit of changing in sensor_dispatcher!!!
+**Purpose:** **Low-pressure** channels: ADS1115 single-ended read and voltage → PSI (`int32_t` stored as PSI × 100).
 
-====================
-PressureSensor::read
-====================
-raw_adc: uses adafruit library to read from the adc using the adc.channel variable.
-Line 20-23 is calibration formula
-data: converts the float back into an int to save bandwidth inside the frame where the data is stored.
+**Primary files:** `lowpressure.h`, `lowpressure.cpp`
 
-!!! The if-statement regarding the raw_adc check needs to be a bit more robust, will look into later, but works for now!!!
+**Used by:** `SensorDispatcher` when `SensorDesc::sensorType` is `LOWPRESSURE` (default in [`sensorconfig.h`](../DataTypes/sensorconfig.h)).
+
+**Documentation:** [Library index](../../docs/libraries/index.md) · [Sample frame](../../docs/reference/sample-frame.md)
