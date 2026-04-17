@@ -4,7 +4,7 @@
 
 #include <SampleFrame.h>
 
-#define RING_BUFFER_SIZE 255
+#define RING_BUFFER_SIZE 256
 
 class RingBuffer {
 private:
@@ -12,6 +12,7 @@ private:
     uint16_t head;
     uint16_t tail;
     uint16_t count;
+    static const uint16_t mask = RING_BUFFER_SIZE - 1;
     uint32_t overrun_count;
 
 public:

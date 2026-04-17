@@ -7,6 +7,11 @@ LoRaModule::LoRaModule(uint8_t rxPin, uint8_t txPin, uint8_t address)
     loraSerial = &Serial1;
 }
 
+LoRaModule::LoRaModule(HardwareSerial& serialPort, uint8_t rxPin, uint8_t txPin, uint8_t address)
+    : _rxPin(rxPin), _txPin(txPin), _address(address) {
+    loraSerial = &serialPort;
+}
+
 bool LoRaModule::begin() {
     // Configure Serial1 for the LoRa UART using the pins supplied to the constructor
     loraSerial->begin(115200, SERIAL_8N1, _rxPin, _txPin);

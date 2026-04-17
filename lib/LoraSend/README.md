@@ -1,9 +1,23 @@
-# LoraSend
+================
+LoraSend::init()
+================
 
-**Purpose:** Drain **`lora_buffer`**, **serialize** a compact binary **header** (not full `payload[]`), send via **`LoraModule::send_data_hexstr`**, with **offline probe** and **backoff** on failure.
+Makes sure lora_module and ring_buffer for lora are initialized for setup and then links the buffer and lora module to the class.
 
-**Primary files:** `lorasend.h`, `lorasend.cpp`
+=====================
+LoraSend::send_next()
+=====================
 
-**Used by:** Teensy (`env:teensy`) — `lora_sender.send_next()` in `main.cpp`.
+Prepares the next frame to send over the lora
 
-**Documentation:** [LoRa protocols](../../docs/protocols/lora.md) · [Ring buffers](../../docs/reference/ring-buffers-and-dispatcher.md) · [Library index](../../docs/libraries/index.md)
+====================
+LoraSend::send_all()
+====================
+
+Sends out the whole buffer ove rthe lora flushing it
+
+================================
+LoraSend::serialize_frame_header
+================================
+
+Takes the frame data and converts it into hexstring to prepare for a send over the lora.

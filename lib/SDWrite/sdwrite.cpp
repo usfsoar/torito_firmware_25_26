@@ -12,7 +12,9 @@ bool SDWrite::init(RingBuffer* buffer, const char *fname) {
     File f = SD.open(filename, FILE_WRITE);
     if (f) {
         uint32_t marker = SD_MARKER_START;
+        uint16_t sensor_count = SENSOR_COUNT;
         f.write(reinterpret_cast<const uint8_t*>(&marker), sizeof(marker));
+        f.write(reinterpret_cast<const uint8_t*>(&sensor_count), sizeof(sensor_count));
         f.close();
     } else {
         // warning: could not write session marker

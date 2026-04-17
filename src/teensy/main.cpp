@@ -88,7 +88,6 @@ void setup() {
 
 void loop() {
     static uint32_t next_daq = 0;
-    static uint32_t last_loop_time = 0;
     
     // Run DAQ at 20Hz (50ms)
     if (millis() >= next_daq) {
@@ -134,11 +133,4 @@ void loop() {
     // Attempt to send one pending LoRa frame each loop (if available)
     lora_sender.send_next();
 
-    // report time between consecutive loop exits
-    {
-        uint32_t now = millis();
-        uint32_t dt = now - last_loop_time;
-        Serial.print("loop dt="); Serial.println(dt);
-        last_loop_time = now;
-    }
 }

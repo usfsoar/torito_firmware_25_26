@@ -16,7 +16,7 @@ public:
     bool init(LoraModule* lora_mod, RingBuffer* rb, uint8_t dest_address);
 
     // Pop a single SampleFrame from the ring buffer, serialize header
-    // (timestamp_us, seq, valid_mask, status_bits, raw_adc[]), and send.
+    // (sensor_count, timestamp_us, seq, valid_mask, status_bits, raw_adc[]), and send.
     // Returns true on success (frame popped and LoRa module accepted it).
     bool send_next();
 
@@ -35,8 +35,8 @@ private:
     // Backoff timestamp: when a previous send failed, skip attempts until this time
     uint32_t next_allowed_send_ms = 0;
 
-    // Our header will be <= 20 bytes (timestamp(4)+seq(4)+valid(1)+status(1)+solenoid(2)+raw_adc[4]*2=20)
-    static constexpr size_t MAX_SERIALIZED_HEADER = 20;
+    // sensor_count(1)+timestamp(4)+seq(4)+valid(1)+status(1)+solenoid(2)+raw_adc[SENSOR_COUNT]*2
+    static constexpr size_t MAX_SERIALIZED_HEADER = 1 + 4 + 4 + 1 + 1 + 2 + (SENSOR_COUNT * sizeof(uint16_t));
 };
 
 #endif // LORASEND_H
