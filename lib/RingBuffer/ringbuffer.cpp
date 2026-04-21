@@ -5,28 +5,29 @@ RingBuffer::RingBuffer() : head(0), tail(0), count(0), overrun_count(0) {
 }
 
 bool RingBuffer::push(const SampleFrame *frame) {
-    if (count >= RING_BUFFER_SIZE) {
+    uint16_t next = (head + 1) & mask;
+
+    if (next == tail) {
         overrun_count++;
         return false;
     }
     frames[head] = *frame;
-    head = (head + 1) % RING_BUFFER_SIZE;
-    count++;
+    head = next;
+    
     return true;
 }
 
 bool RingBuffer::pop(SampleFrame *frame) {
-    if (count == 0) {
+    if (head == tail) {
         return false;
     }
     *frame = frames[tail];
-    tail = (tail + 1) % RING_BUFFER_SIZE;
-    count--;
+    tail = (tail + 1) & mask;
     return true;
 }
 
 uint16_t RingBuffer::get_count() const {
-    return count;
+    return (head - tail) & mask;
 }
 
 uint32_t RingBuffer::get_overrun_count() const {

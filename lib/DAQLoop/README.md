@@ -1,16 +1,14 @@
-# DAQLoop
+========
+daq_init
+========
+Initializes the ticks and sequence varibales for the frames
 
-**Purpose:** One DAQ tick: build a `SampleFrame` — mux select, read all scheduled sensors, read solenoid state, push to `daq_buffer`.
-
-**Primary files:** `daqloop.h`, `daqloop.cpp`
-
-**API:**
-
-| Function | Role |
-|----------|------|
-| `daq_init()` | Reset sequence and tick counters |
-| `daq_step()` | Acquire one frame; sets `status_bits` (`MUX_ERR`, `I2C_ERR`, `OVERRUN` on ring push failure) |
-
-**Used by:** Teensy (`env:teensy`) only.
-
-**Documentation:** [Teensy DAQ](../../docs/firmware/teensy-daq.md) · [Sample frame](../../docs/reference/sample-frame.md) · [Ring buffers](../../docs/reference/ring-buffers-and-dispatcher.md) · [Library index](../../docs/libraries/index.md)
+========
+daq_step
+========
+Calls the SampleFrame and initializes the variables in the frame
+for loop line 28: counts through all the sensors in sensorconfig to select through them.
+if statement line 37: calls for mux_selection before reading sensor data.
+if statement line 47: calls sensor dispatch to read the sensor data
+if statement line 57&62: Currently pushes frames to two separate buffers. Need to implement it to push into one buffer and then that daq buffer has a thread that separates the daq buffer into two other ring buffers, one for sd, one for lora.
+Ends the loop incrementing tick by one

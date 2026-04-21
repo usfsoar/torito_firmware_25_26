@@ -7,6 +7,7 @@
 class LoRaModule {
 public:
     LoRaModule(uint8_t rxPin, uint8_t txPin, uint8_t address);
+    LoRaModule(HardwareSerial& serialPort, uint8_t rxPin, uint8_t txPin, uint8_t address);
     
     bool begin();
     bool configure(uint8_t address, unsigned long band, uint8_t networkId);
@@ -16,7 +17,6 @@ public:
     bool receiveData(String& hexData);
     
 private:
-    // ESP32-only: always use Serial1 for the LoRa UART
     HardwareSerial* loraSerial = &Serial1;
     uint8_t _rxPin;
     uint8_t _txPin;

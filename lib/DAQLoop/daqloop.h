@@ -17,8 +17,6 @@ extern SolenoidReceive solenoid_receive;
 #define I2C_ERR    (1 << 1)
 #define OVERRUN    (1 << 2)
 
-#define NO_MUX 0xFF
-
 void daq_init();
 void daq_step();
 

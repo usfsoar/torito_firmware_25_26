@@ -1,11 +1,28 @@
-# SDWrite
+=============
+SDWrite Class
+=============
+Reason I had made this a class is to encapsulate the variables needed for the serialized write_buffer as private members.
+We begin by pointing to the sd_buffer and then creating the write_buffer.
+==============
+enum SDMarkers
+==============
+Enumerators for writing session begin and session end bytes into the sdcard for future decoding and readability.
 
-**Purpose:** Drain **`sd_buffer`** into a **RAM block buffer**, then append **binary `SampleFrame`** blobs to an SD file (default **`data.bin`** on Teensy built-in SD). Writes a **session start marker** on init.
+=========
+bool init
+=========
+Takes in the pointer to the RingBuffer and an assigned name for the file to write into the SD.
 
-**Primary files:** `sdwrite.h`, `sdwrite.cpp`
 
-**API:** `init(buffer, filename)`, `data()` (call from main loop), `force_flush()`
+=================
+bool flush_buffer
+=================
+Private helper function that flushes the write buffer block into the sd card.
 
-**Used by:** Teensy (`env:teensy`) only.
+=========
+bool data
+=========
 
-**Documentation:** [Ring buffers](../../docs/reference/ring-buffers-and-dispatcher.md) · [Teensy DAQ](../../docs/firmware/teensy-daq.md) · [Library index](../../docs/libraries/index.md)
+================
+bool force_flush
+================

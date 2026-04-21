@@ -8,7 +8,8 @@ struct SensorDesc {
     enum type {
         TEMPERATURE,
         LOWPRESSURE,
-        HIGHPRESSURE
+        HIGHPRESSURE,
+        LOADCELL
     } sensorType;
     uint8_t bus_id;
     uint8_t mux_channel;
