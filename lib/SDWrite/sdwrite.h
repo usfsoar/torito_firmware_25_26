@@ -8,7 +8,7 @@
 class SDWrite {
 private:
     RingBuffer* sd_buffer = nullptr;            // pointer to the global ring buffer (set in init)
-    static const size_t WRITE_BUFFER_SIZE = 4096; // bytes — keep sector-aligned (multiple of 512)
+    static const size_t WRITE_BUFFER_SIZE = 8192; // bytes — keep sector-aligned (multiple of 512)
     uint8_t write_buffer[WRITE_BUFFER_SIZE];
     SampleFrame frame;
     size_t write_buffer_index = 0;

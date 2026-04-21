@@ -58,7 +58,7 @@ const SensorDesc sensor_table[SENSOR_COUNT] = {
         .mux_channel = NO_MUX,
         .i2c_address = ADS1115_I2C_ADDR,
         .adc_channel = 2,           // ADS1115 input A4
-        .period_ticks = 1
+        .period_ticks = 5           // Read every 5 frames (1.25 seconds if frame rate is 250ms)
     },
     {
         .id = 5,

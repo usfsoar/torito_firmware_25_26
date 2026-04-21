@@ -3,6 +3,8 @@
 // Global state
 static uint32_t seq = 0;
 static uint32_t tick = 0;
+static uint32_t cached_payload[SENSOR_COUNT] = {};
+static uint16_t cached_raw_adc[SENSOR_COUNT] = {};
 
 // External buffers (declared in main)
 extern RingBuffer daq_buffer;
@@ -11,6 +13,10 @@ extern SolenoidReceive solenoid_receive;
 void daq_init() {
     seq = 0;
     tick = 0;
+    for (int i = 0; i < SENSOR_COUNT; ++i) {
+        cached_payload[i] = 0;
+        cached_raw_adc[i] = 0;
+    }
 }
 
 void daq_step() {
@@ -22,6 +28,8 @@ void daq_step() {
 
     for (int i = 0; i < SENSOR_COUNT; i++) {
         const SensorDesc &desc = sensor_table[i];
+        frame.payload[desc.id] = cached_payload[desc.id];
+        frame.raw_adc[desc.id] = cached_raw_adc[desc.id];
         
         // Check if scheduled this frame
         if ((tick % desc.period_ticks) != 0) {
@@ -29,10 +37,15 @@ void daq_step() {
         }
         // select mux channel for sensor
         // Select MUX channel if needed (DAQ owns bus control)
+        static uint8_t current_mux = 0xFF;   // invalid initial value to force first-time selection
+
         if (desc.mux_channel != NO_MUX) {
-            if (!mux_select(desc.bus_id, desc.mux_channel)) {
-                frame.status_bits |= MUX_ERR;
-                continue;
+            if (desc.mux_channel != current_mux) {
+                if (!mux_select(desc.bus_id, desc.mux_channel)) {
+                    frame.status_bits |= MUX_ERR;
+                    continue;
+                }
+                current_mux = desc.mux_channel;
             }
         }
         // reading sensor
@@ -42,6 +55,8 @@ void daq_step() {
         if (sensor_read_dispatch(desc, processed_value, raw_adc)) {
             frame.payload[desc.id] = processed_value;
             frame.raw_adc[desc.id] = raw_adc;
+            cached_payload[desc.id] = processed_value;
+            cached_raw_adc[desc.id] = raw_adc;
             frame.valid_mask |= (1 << desc.id);
         } else {
             frame.status_bits |= I2C_ERR;
