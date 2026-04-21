@@ -10,5 +10,6 @@
 
 bool sensor_dispatcher_init();
 bool sensor_read_dispatch(const SensorDesc &sensor, int32_t &data, int16_t &raw_adc);
+bool sensor_calculate_dispatch(const SensorDesc &sensor, int16_t raw_adc, int32_t &data);
 
 #endif // SENSOR_DISPATCHER_H

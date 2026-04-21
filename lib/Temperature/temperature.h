@@ -17,6 +17,7 @@ private:
 public:
     bool init();
     bool read(const SensorDesc &sensor, int32_t &data, int16_t &raw_adc);
+    bool calibrate_from_raw(const SensorDesc &sensor, int16_t raw_adc, int32_t &data);
 };
 
 #endif // TEMPERATURE_H

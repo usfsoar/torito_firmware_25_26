@@ -57,7 +57,7 @@ const SensorDesc sensor_table[SENSOR_COUNT] = {
         .bus_id = 0,
         .mux_channel = NO_MUX,
         .i2c_address = ADS1115_I2C_ADDR,
-        .adc_channel = 2,           // ADS1115 input A4
+        .adc_channel = 2,           // Teensy Channel 14 (A14) for temperature sensor (e.g. TMP36)
         .period_ticks = 5           // Read every 5 frames (1.25 seconds if frame rate is 250ms)
     },
     {

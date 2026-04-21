@@ -29,6 +29,10 @@ bool LoadCell::read(const SensorDesc &sensor, int32_t &data, int16_t &raw_adc) {
     const uint8_t channel = static_cast<uint8_t>(sensor.adc_channel & 0x03);
 
     raw_adc = LoadCell::ads.readADC_SingleEnded(channel);
+    return calibrate_from_raw(sensor, raw_adc, data);
+}
+
+bool LoadCell::calibrate_from_raw(const SensorDesc &, int16_t raw_adc, int32_t &data) {
     long net_counts = static_cast<long>(raw_adc) - LoadCell::offset_counts;
 
     if (net_counts < 0) {

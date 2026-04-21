@@ -48,7 +48,7 @@ void setup() {
         delay(1000);
     }
     delay(5);  // Allow mux to stabilize
-    
+
     // Initialize sensors
     while (!sensor_dispatcher_init()) {
         Serial.println("ERROR: Sensor init failed!");
