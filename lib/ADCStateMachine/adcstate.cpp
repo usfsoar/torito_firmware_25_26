@@ -1,7 +1,7 @@
 #include "adcstate.h"
 
 ADCState adc; // global state for the ADC state machine
-Adafruit_ADS1115 g_ads; // global ADS1115 instance
+Adafruit_ADS1015 g_ads; // global ADS1015 instance
 
 static uint16_t ads_mux_from_channel(uint8_t channel) {
     switch (channel & 0x03) {
@@ -31,12 +31,12 @@ bool adc_hw_init() {
     }
 
     g_ads.setGain(GAIN_TWOTHIRDS);            // keep your current gain choice
-    g_ads.setDataRate(RATE_ADS1115_860SPS);   // max ADS1115 rate
+    g_ads.setDataRate(RATE_ADS1015_3300SPS);   // max ADS1015 rate
     return true;
 }
 
 void adc_start(const SensorDesc &desc) {
-    // use non-blocking ADS1115 API
+    // use non-blocking ADS1015 API
     g_ads.startADCReading(ads_mux_from_channel(desc.adc_channel), false); // single-shot mode
     adc.state = ADCPhase::Converting;
     adc.pending_sensor = &desc;
@@ -49,7 +49,7 @@ bool adc_finish() {
     if (adc.state != ADCPhase::Converting) return false;
 
     // wait enough time for conversion to complete
-    if (micros() - adc.start_us < ADS1115_CONV_US) return false;
+    if (micros() - adc.start_us < ADS1015_CONV_US) return false;
 
     adc.last_raw = g_ads.getLastConversionResults();
     adc.state = ADCPhase::ResultReady;

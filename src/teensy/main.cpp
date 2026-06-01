@@ -104,7 +104,7 @@ void loop() {
                     if (i < SENSOR_COUNT - 1) Serial.print('\t'); else Serial.println();
                     continue;
                 }
-                delay(1); // small settle time
+                //delay(1); // small settle time
             }
 
             int32_t processed = 0;
@@ -121,7 +121,7 @@ void loop() {
         // --- end serial read ---
 #endif
         // schedule next DAQ step (value in milliseconds)
-        next_daq += 50;
+        next_daq += 1;
     }
     if (!dispatcher_thread_step()) {
         Serial.println("ERROR: Dispatcher thread step failed! Overflow detetcted!");

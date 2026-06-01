@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "daqloop.h"
 
 // Global state
@@ -191,7 +192,11 @@ void daq_step() {
     }
     
     // Push to DAQ buffer (every frame)
-    if (!daq_buffer.push(&frame)) {
+    const uint16_t queue_before = daq_buffer.get_count();
+    const bool pushed = daq_buffer.push(&frame);
+    const uint16_t queue_after = daq_buffer.get_count();
+
+    if (!pushed) {
         frame.status_bits |= OVERRUN;
     }
 

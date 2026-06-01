@@ -4,7 +4,7 @@
 #include <SensorDesc.h>
 #include <hwconfig.h>
 
-#define SENSOR_COUNT 6
+#define SENSOR_COUNT 4
 
 // Enable printing of pressure data to Serial from `main` (0 = off, 1 = on)
 #ifndef ENABLE_PRESSURE_SERIAL
@@ -49,24 +49,6 @@ const SensorDesc sensor_table[SENSOR_COUNT] = {
         .mux_channel = ADS_MUX_CHANNEL,
         .i2c_address = ADS1115_I2C_ADDR,
         .adc_channel = 3,           // ADS1115 input A3
-        .period_ticks = 1
-    },
-    {
-        .id = 4,
-        .sensorType = SensorDesc::type::TEMPERATURE,
-        .bus_id = 0,
-        .mux_channel = NO_MUX,
-        .i2c_address = NO_ADC,
-        .adc_channel = 2,           // Teensy Channel 14 (A14) for temperature sensor (e.g. TMP36)
-        .period_ticks = 5           // Read every 5 frames (1.25 seconds if frame rate is 250ms)
-    },
-    {
-        .id = 5,
-        .sensorType = SensorDesc::type::LOADCELL,
-        .bus_id = 0,
-        .mux_channel = NO_MUX,
-        .i2c_address = ADS1115_I2C_ADDR,
-        .adc_channel = 0,           // ADS1115 input A0 for load cell
         .period_ticks = 1
     }
 };

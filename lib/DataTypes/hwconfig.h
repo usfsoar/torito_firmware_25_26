@@ -17,8 +17,7 @@
 // If the solenoid MCU is connected behind a PCA9548A mux, set the channel
 // (0..7). Set to 0xFF if attached to the main bus.
 #define SOLENOID_MUX_CHANNEL 7
-#define ADS_MUX_CHANNEL 4
+#define ADS_MUX_CHANNEL 5
 #define NO_MUX 0xFF
-#define NO_ADC 0xFF
 
 #endif // HWCONFIG_H
