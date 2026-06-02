@@ -43,15 +43,26 @@ void adc_start(const SensorDesc &desc) {
     adc.pending_channel = desc.adc_channel;
     adc.pending_mux = desc.mux_channel;
     adc.start_us = micros();
+    Serial.print("ADC start: ");
+    Serial.println(reinterpret_cast<uintptr_t>(adc.pending_sensor));
+    Serial.println(adc.pending_channel);
+    Serial.println(adc.pending_mux);
 }
 
 bool adc_finish() {
-    if (adc.state != ADCPhase::Converting) return false;
-
+    if (adc.state != ADCPhase::Converting) {
+        Serial.print("ADC finish called but ADC not converting: ");
+        Serial.println(reinterpret_cast<uintptr_t>(adc.pending_sensor));
+        return false;
+    }
     // wait enough time for conversion to complete
     if (micros() - adc.start_us < ADS1015_CONV_US) return false;
 
     adc.last_raw = g_ads.getLastConversionResults();
+    Serial.print("ADC raw result: ");
+    Serial.println(adc.last_raw);
     adc.state = ADCPhase::ResultReady;
+    Serial.print("ADC finished: ");
+    Serial.println(reinterpret_cast<uintptr_t>(adc.pending_sensor));
     return true;
 }

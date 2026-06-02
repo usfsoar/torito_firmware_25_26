@@ -30,6 +30,10 @@ bool LowPressureSensor::calibrate_from_raw(const SensorDesc &, int16_t raw_adc, 
     
     // Debug: check if reading makes sense
     if (raw_adc == -1 || raw_adc == 0x7FFF || raw_adc == 0 || voltage < 0.1f) {
+        Serial.print("Invalid ADC reading: raw_adc=");
+        Serial.print(raw_adc);
+        Serial.print(", voltage=");
+        Serial.println(voltage);
         return false;  // Invalid reading
     }
     

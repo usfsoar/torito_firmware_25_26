@@ -112,6 +112,7 @@ void daq_step() {
             cached_raw_adc[done.id] = static_cast<uint16_t>(done_raw);
             frame.valid_mask |= (1 << done.id);
         } else {
+            Serial.println("ERROR: 1st Sensor calculation failed!");
             frame.status_bits |= I2C_ERR;
         }
     }
@@ -135,6 +136,7 @@ void daq_step() {
                 cached_raw_adc[done.id] = static_cast<uint16_t>(done_raw);
                 frame.valid_mask |= (1 << done.id);
             } else {
+                Serial.println("ERROR: 2nd Sensor calculation failed!");
                 frame.status_bits |= I2C_ERR;
             }
         }
@@ -164,6 +166,7 @@ void daq_step() {
             cached_raw_adc[desc.id] = raw_adc;
             frame.valid_mask |= (1 << desc.id);
         } else {
+            Serial.println("ERROR: Non-ADS Sensor calculation failed!");
             frame.status_bits |= I2C_ERR;
         }
     }

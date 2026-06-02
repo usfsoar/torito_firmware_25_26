@@ -120,7 +120,7 @@ void loop() {
         // --- end serial read ---
 #endif
         // schedule next DAQ step (value in milliseconds)
-        next_daq += 1;
+        next_daq += 100;
     }
     if (!dispatcher_thread_step()) {
         Serial.println("ERROR: Dispatcher thread step failed! Overflow detetcted!");
