@@ -9,7 +9,7 @@ bool LoadCell::init() {
     }
 
     LoadCell::ads.setGain(GAIN_TWOTHIRDS);
-
+    LoadCell::ads.setDataRate(RATE_ADS1015_3300SPS);
     return set_zero(LoadCell::kDefaultTareSamples);
 }
 

@@ -10,7 +10,8 @@ bool HighPressureSensor::init() {
     if (!ads.begin(ADS1115_I2C_ADDR)) {
         return false;
     }
-    ads.setGain(GAIN_TWOTHIRDS);
+    HighPressureSensor::ads.setGain(GAIN_TWOTHIRDS);
+    HighPressureSensor::ads.setDataRate(RATE_ADS1015_3300SPS);
     return true;
 }
 

@@ -10,7 +10,8 @@ bool LowPressureSensor::init() {
     if (!ads.begin(ADS1115_I2C_ADDR)) {
         return false;
     }
-    ads.setGain(GAIN_TWOTHIRDS);
+    LowPressureSensor::ads.setGain(GAIN_TWOTHIRDS);
+    LowPressureSensor::ads.setDataRate(RATE_ADS1015_3300SPS);
     return true;
 }
 

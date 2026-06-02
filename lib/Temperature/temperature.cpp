@@ -5,9 +5,10 @@ const float TemperatureSensor::TEMP_MAX = 5.0;
 const float TemperatureSensor::CELSIUS_MAX = 100.0;
 
 bool TemperatureSensor::init() {
-    if (!ads.begin()) {
+    if (!TemperatureSensor::ads.begin(ADS1015_I2C_ADDR)) {
         return false;
     }
+    TemperatureSensor::ads.setDataRate(RATE_ADS1015_3300SPS);
     return true;
 }
 

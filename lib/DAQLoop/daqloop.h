@@ -9,7 +9,6 @@
 #include <cstdint>
 #include <solenoidreceive.h>
 #include <hwconfig.h>
-#include <adcstate.h>
 
 extern SolenoidReceive solenoid_receive;
 
