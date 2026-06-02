@@ -20,8 +20,8 @@ const SensorDesc sensor_table[SENSOR_COUNT] = {
         .sensorType = SensorDesc::type::LOWPRESSURE,
         .bus_id = 0,
         .mux_channel = ADS_MUX_CHANNEL,           // TCA9548A channel 5 (SD5/SC5)
-        .i2c_address = ADS1115_I2C_ADDR,        // ADS1115 address
-        .adc_channel = 0,           // ADS1115 input A0
+        .i2c_address = ADS1015_I2C_ADDR,        // ADS1015 address
+        .adc_channel = 0,           // ADS1015 input A0
         .period_ticks = 1           // Read every frame
     },
     {
@@ -29,8 +29,8 @@ const SensorDesc sensor_table[SENSOR_COUNT] = {
         .sensorType = SensorDesc::type::LOWPRESSURE,
         .bus_id = 0,
         .mux_channel = ADS_MUX_CHANNEL,
-        .i2c_address = ADS1115_I2C_ADDR,
-        .adc_channel = 1,           // ADS1115 input A1
+        .i2c_address = ADS1015_I2C_ADDR,
+        .adc_channel = 1,           // ADS1015 input A1
         .period_ticks = 1
     },
     {
@@ -38,8 +38,8 @@ const SensorDesc sensor_table[SENSOR_COUNT] = {
         .sensorType = SensorDesc::type::LOWPRESSURE,
         .bus_id = 0,
         .mux_channel = ADS_MUX_CHANNEL,
-        .i2c_address = ADS1115_I2C_ADDR,
-        .adc_channel = 2,           // ADS1115 input A2
+        .i2c_address = ADS1015_I2C_ADDR,
+        .adc_channel = 2,           // ADS1015 input A2
         .period_ticks = 1
     },
     {
@@ -47,8 +47,8 @@ const SensorDesc sensor_table[SENSOR_COUNT] = {
         .sensorType = SensorDesc::type::LOWPRESSURE,
         .bus_id = 0,
         .mux_channel = ADS_MUX_CHANNEL,
-        .i2c_address = ADS1115_I2C_ADDR,
-        .adc_channel = 3,           // ADS1115 input A3
+        .i2c_address = ADS1015_I2C_ADDR,
+        .adc_channel = 3,           // ADS1015 input A3
         .period_ticks = 1
     }
 };

@@ -12,7 +12,7 @@ private:
     static const float TEMP_MIN;
     static const float TEMP_MAX;
     static const float CELSIUS_MAX;
-    Adafruit_ADS1115 ads;
+    Adafruit_ADS1015 ads;
 
 public:
     bool init();

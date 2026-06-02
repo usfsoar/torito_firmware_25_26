@@ -8,7 +8,7 @@
 
 class LoadCell {
 private:
-    static Adafruit_ADS1115 ads;
+    static Adafruit_ADS1015 ads;
     static long offset_counts;
     static constexpr uint8_t kDefaultTareSamples = 5;
     static constexpr uint8_t kDefaultAdcChannel = 0;

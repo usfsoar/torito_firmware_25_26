@@ -8,6 +8,8 @@ bool TemperatureSensor::init() {
     if (!ads.begin()) {
         return false;
     }
+    ads.setGain(GAIN_TWOTHIRDS);
+    ads.setDataRate(RATE_ADS1015_3300SPS);
     return true;
 }
 

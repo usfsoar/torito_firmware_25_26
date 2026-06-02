@@ -7,10 +7,11 @@ const float HighPressureSensor::V_MAX = 4.5f;
 const float HighPressureSensor::PSI_MAX = 5000.0f;
 
 bool HighPressureSensor::init() {
-    if (!ads.begin(ADS1115_I2C_ADDR)) {
+    if (!ads.begin(ADS1015_I2C_ADDR)) {
         return false;
     }
     ads.setGain(GAIN_TWOTHIRDS);
+    ads.setDataRate(RATE_ADS1015_3300SPS);
     return true;
 }
 

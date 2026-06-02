@@ -5,7 +5,7 @@
 
 static const uint8_t kMuxChannels = 8;
 static const uint8_t kKnownProbeAddresses[] = {
-    ADS1115_I2C_ADDR,
+    ADS1015_I2C_ADDR,
     SOLENOID_I2C_ADDR,
 };
 

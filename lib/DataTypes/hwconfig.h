@@ -7,7 +7,7 @@
 // I2C address for the external solenoid-status MCU (7-bit)
 // Change this if the slave device address is different on your bus.
 #define SOLENOID_I2C_ADDR 0x09
-#define ADS1115_I2C_ADDR 0x48
+#define ADS1015_I2C_ADDR 0x48
 
 // HX711 load cell amplifier pins and gain
 #define HX711_DOUT_PIN 2 // placeholder for HX711 data pin

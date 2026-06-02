@@ -17,7 +17,6 @@
 RingBuffer daq_buffer;
 RingBuffer sd_buffer;
 RingBuffer lora_buffer;
-
 // SD writer instance (drains `sd_buffer` and performs block writes)
 SDWrite sdwriter;
 

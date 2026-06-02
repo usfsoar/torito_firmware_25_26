@@ -9,7 +9,7 @@ static uint16_t cached_raw_adc[SENSOR_COUNT] = {};
 static uint8_t current_mux = 0xFF;
 
 static bool is_ads_sensor(const SensorDesc &desc) {
-    return desc.i2c_address == ADS1115_I2C_ADDR;
+    return desc.i2c_address == ADS1015_I2C_ADDR;
 }
 
 static bool select_sensor_mux(const SensorDesc &desc) {
@@ -94,7 +94,7 @@ void daq_step() {
         }
 
         while (!adc_finish()) {
-            // Busy wait is bounded by ADS1115 conversion time (~1.2ms at 860SPS).
+            // Busy wait is bounded by ADS1015 conversion time (~0.3ms at 3300SPS).
         }
 
         const SensorDesc done = *adc.pending_sensor;
@@ -118,7 +118,7 @@ void daq_step() {
 
     if (has_pending_ads) {
         while (!adc_finish()) {
-            // Busy wait is bounded by ADS1115 conversion time (~1.2ms at 860SPS).
+            // Busy wait is bounded by ADS1015 conversion time (~0.3ms at 3300SPS).
         }
 
         if (adc.pending_sensor != nullptr) {

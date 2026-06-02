@@ -1,14 +1,15 @@
 #include "loadcell.h"
 
-Adafruit_ADS1115 LoadCell::ads;
+Adafruit_ADS1015 LoadCell::ads;
 long LoadCell::offset_counts = 0;
 
 bool LoadCell::init() {
-    if (!LoadCell::ads.begin(ADS1115_I2C_ADDR)) {
+    if (!LoadCell::ads.begin(ADS1015_I2C_ADDR)) {
         return false;
     }
 
     LoadCell::ads.setGain(GAIN_TWOTHIRDS);
+    LoadCell::ads.setDataRate(RATE_ADS1015_3300SPS);
 
     return set_zero(LoadCell::kDefaultTareSamples);
 }

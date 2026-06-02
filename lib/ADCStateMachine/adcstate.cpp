@@ -26,7 +26,7 @@ void adc_init(ADCState &adc_state) {
 }
 
 bool adc_hw_init() {
-    if (!g_ads.begin(ADS1115_I2C_ADDR)) {
+    if (!g_ads.begin(ADS1015_I2C_ADDR)) {
         return false;
     }
 

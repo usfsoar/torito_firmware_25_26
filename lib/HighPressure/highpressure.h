@@ -13,7 +13,7 @@ private:
     static const float V_MIN;
     static const float V_MAX;
     static const float PSI_MAX;
-    Adafruit_ADS1115 ads;
+    Adafruit_ADS1015 ads;
 
 public:
     bool init();
