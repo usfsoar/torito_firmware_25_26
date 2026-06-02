@@ -16,10 +16,15 @@ private:
 public:
     bool init();
     bool read(const SensorDesc &sensor, int32_t &data, int16_t &raw_adc);
-    bool calibrate_from_raw(const SensorDesc &sensor, int16_t raw_adc, int32_t &data);
-    bool set_zero(uint8_t samples = 5);
+    bool set_zero(uint8_t samples = kDefaultTareSamples);
     long get_offset_counts() const;
 
+private:
+    static Adafruit_ADS1115 ads;
+    static long offset_counts;
+
+    static constexpr uint8_t kDefaultTareSamples = 5;
+    static constexpr uint8_t kDefaultAdcChannel = 0;
 };
 
 #endif

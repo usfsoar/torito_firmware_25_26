@@ -39,12 +39,13 @@ bool LoadCell::calibrate_from_raw(const SensorDesc &, int16_t raw_adc, int32_t &
         net_counts = 0;
     }
 
-    // Convert counts to grams with the same calibration model discussed earlier.
-    // Update load_cell_rating_kg when your specific cell rating is known.
     constexpr long double load_cell_rating_kg = 1.0L;
-    constexpr long double force_per_step = (load_cell_rating_kg * 1000.0L) / 4295241.0L;
+    constexpr long double force_per_step =
+        (load_cell_rating_kg * 1000.0L) / 4295241.0L;
 
-    data = static_cast<int32_t>(force_per_step * static_cast<long double>(net_counts));
+    data = static_cast<int32_t>(
+        force_per_step * static_cast<long double>(net_counts)
+    );
 
     return true;
 }
