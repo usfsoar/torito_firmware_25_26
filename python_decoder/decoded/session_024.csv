@@ -1,1 +1,0 @@
-timestamp_us,seq,valid_mask,status_bits,solenoid_state,payload0_centi_psi,payload1_centi_psi,payload2_centi_psi,payload3_centi_psi,payload4_centi_psi,payload5_centi_psi,raw_adc0,raw_adc1,raw_adc2,raw_adc3,raw_adc4,raw_adc5

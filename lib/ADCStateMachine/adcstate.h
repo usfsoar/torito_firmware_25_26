@@ -6,7 +6,7 @@
 #include <muxdriver.h>
 #include <Adafruit_ADS1X15.h>
 
-#define ADS1115_CONV_US 1200 // microseconds for ADS1115 conversion at 860SPS
+#define ADS1015_CONV_US 2000 // conservative ADS1015 single-shot conversion wait
 
 enum class ADCPhase {
     Idle,
@@ -29,6 +29,6 @@ void adc_start(const SensorDesc &desc);
 bool adc_finish();
 bool adc_hw_init();
 extern ADCState adc; // global state for the ADC state machine
-extern Adafruit_ADS1115 g_ads; // global ADS1115 instance
+extern Adafruit_ADS1015 g_ads;
 
 #endif // ADC_STATE_H

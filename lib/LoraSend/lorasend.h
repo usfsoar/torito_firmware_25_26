@@ -36,7 +36,7 @@ private:
     uint32_t next_allowed_send_ms = 0;
 
     // sensor_count(1)+timestamp(4)+seq(4)+valid(1)+status(1)+solenoid(2)+raw_adc[SENSOR_COUNT]*2
-    static constexpr size_t MAX_SERIALIZED_HEADER = 1 + 4 + 4 + 1 + 1 + 2 + (SENSOR_COUNT * sizeof(uint16_t));
+    static constexpr size_t MAX_SERIALIZED_HEADER = 4 + 4 + 1 + 1 + 2 + (SENSOR_COUNT * sizeof(uint16_t));
 };
 
 #endif // LORASEND_H

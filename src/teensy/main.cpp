@@ -22,7 +22,7 @@ RingBuffer lora_buffer;
 SDWrite sdwriter;
 
 // LoRa module + sender
-// NOTE: LoRa uses a hardware UART. On Teensy this project uses Serial4 (RX4/TX4).
+// NOTE: LoRa uses Serial5 on Teensy (see lib/LoRaModule/loramodule.h).
 // Constructor pins are ignored on Teensy — only the module address is required.
 LoraModule lora_module(LORA_SENDER_ADDRESS);
 LoraSend lora_sender;
@@ -42,7 +42,7 @@ void setup() {
     }
     
     // Select mux channel for sensor initialization
-    // (All sensors are on channel 7 per sensorconfig.h)
+    // ADS sensors are selected through ADS_MUX_CHANNEL.
     while (!mux_select(0, ADS_MUX_CHANNEL)) {
         Serial.println("ERROR: Mux channel select failed!");
         delay(1000);
@@ -124,7 +124,7 @@ void loop() {
         next_daq += 1;
     }
     if (!dispatcher_thread_step()) {
-        Serial.println("ERROR: Dispatcher thread step failed! Overflow detetcted!");
+        Serial.println("ERROR: Dispatcher thread step failed! Overflow detected!");
     }
 
     // Drive SD writer (drains `sd_buffer` and writes in blocks).

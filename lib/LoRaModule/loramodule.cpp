@@ -2,8 +2,14 @@
 
 // lightweight debug prints for LoRa operations
 #ifdef DEBUG
+#define LORA_DEBUG 0
+#if LORA_DEBUG
 #define LDBG(msg) Serial.print(msg)
 #define LDBGLN(msg) Serial.println(msg)
+#else
+#define LDBG(msg) do {} while (0)
+#define LDBGLN(msg) do {} while (0)
+#endif
 #else
 #define LDBG(msg) (void)0
 #define LDBGLN(msg) (void)0
@@ -47,8 +53,7 @@ bool LoraModule::configure(uint8_t address, unsigned long band, uint8_t network_
 
     // Apply default radio parameters (SF, BW, CR, preamble)
     if (set_parameter(LORA_PARAMETER_SF, LORA_PARAMETER_BW, LORA_PARAMETER_CR, LORA_PARAMETER_PREAMBLE)) {
-        Serial.print("LoRa parameters set: ");
-        Serial.println(LORA_PARAMETER_DEFAULT_STR);
+        LDBGLN("LoRa parameters set");
     } else {
         LDBGLN("Params set fail");
     }
@@ -165,7 +170,7 @@ bool LoraModule::send_data_hexstr(uint8_t dest_address, String hex_data) {
 bool LoraModule::send_data_hexstr(uint8_t dest_address, const uint8_t* data, size_t length) {
     // enforce the 20-byte maximum you requested
     if (data == nullptr || length == 0 || length > 20) {
-        Serial.println("Data length exceeds 20 bytes");
+        LDBGLN("Data length over 20 bytes.");
         return false;
     }
 
@@ -180,7 +185,7 @@ bool LoraModule::send_data_hexstr(uint8_t dest_address, const uint8_t* data, siz
     int pos = prefix_len;
     for (size_t i = 0; i < length; ++i) {
         if (pos + 2 >= (int)sizeof(cmd)) {
-            Serial.println("Command buffer overflow");
+            LDBGLN("Command buffer overflow");
             return false; // safety
         }
         uint8_t b = data[i];
@@ -189,12 +194,16 @@ bool LoraModule::send_data_hexstr(uint8_t dest_address, const uint8_t* data, siz
     }
     cmd[pos] = '\0';
 
+    //Serial.print("LORA AT CMD: ");
+    //Serial.println(cmd);
+
     // If module is known-unreachable, skip to avoid waiting
-    
+
     if (!_online) {
         LDBGLN("LORA OFFLINE skip");
         return false;
     }
+
     String response = send_at_command(cmd, 200);
     if (response.indexOf("OK") != -1) {
         LDBGLN("LORA SEND OK");

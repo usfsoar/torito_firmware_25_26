@@ -15,12 +15,16 @@ static bool select_sensor_mux(const SensorDesc &desc) {
     if (desc.mux_channel == NO_MUX) {
         return true;
     }
+
     if (desc.mux_channel == current_mux) {
         return true;
     }
+
     if (!mux_select(desc.bus_id, desc.mux_channel)) {
+        current_mux = 0xFF;
         return false;
     }
+
     current_mux = desc.mux_channel;
     return true;
 }
@@ -93,7 +97,7 @@ void daq_step() {
         }
 
         while (!adc_finish()) {
-            // Busy wait is bounded by ADS1115 conversion time (~1.2ms at 860SPS).
+            // Busy wait is bounded by ADS1015_CONV_US.
         }
 
         const SensorDesc done = *adc.pending_sensor;
@@ -111,13 +115,14 @@ void daq_step() {
             cached_raw_adc[done.id] = static_cast<uint16_t>(done_raw);
             frame.valid_mask |= (1 << done.id);
         } else {
+            //Serial.println("ERROR: 1st Sensor calculation failed!");
             frame.status_bits |= I2C_ERR;
         }
     }
 
     if (has_pending_ads) {
         while (!adc_finish()) {
-            // Busy wait is bounded by ADS1115 conversion time (~1.2ms at 860SPS).
+            // Busy wait is bounded by ADS1015_CONV_US.
         }
 
         if (adc.pending_sensor != nullptr) {
@@ -134,6 +139,7 @@ void daq_step() {
                 cached_raw_adc[done.id] = static_cast<uint16_t>(done_raw);
                 frame.valid_mask |= (1 << done.id);
             } else {
+                //Serial.println("ERROR: 2nd Sensor calculation failed!");
                 frame.status_bits |= I2C_ERR;
             }
         }
@@ -163,6 +169,7 @@ void daq_step() {
             cached_raw_adc[desc.id] = raw_adc;
             frame.valid_mask |= (1 << desc.id);
         } else {
+            //Serial.println("ERROR: Non-ADS Sensor calculation failed!");
             frame.status_bits |= I2C_ERR;
         }
     }
@@ -176,22 +183,25 @@ void daq_step() {
             if (!mux_select(0, SOLENOID_MUX_CHANNEL)) {
                 frame.status_bits |= MUX_ERR;
                 frame.solenoid_state = solenoid_receive.get_cached_state();
+
+                // Mux state is now unknown.
+                current_mux = 0xFF;
             } else {
+                // Keep software mux cache aligned with actual hardware state.
+                current_mux = SOLENOID_MUX_CHANNEL;
+
                 if (!solenoid_receive.read(cur)) {
                     frame.status_bits |= I2C_ERR;
                 }
+
                 frame.solenoid_state = solenoid_receive.get_cached_state();
             }
-        } else {
-            if (!solenoid_receive.read(cur)) {
-                frame.status_bits |= I2C_ERR;
-            }
-            frame.solenoid_state = solenoid_receive.get_cached_state();
         }
     }
-    
     // Push to DAQ buffer (every frame)
-    if (!daq_buffer.push(&frame)) {
+    const bool pushed = daq_buffer.push(&frame);
+
+    if (!pushed) {
         frame.status_bits |= OVERRUN;
     }
 

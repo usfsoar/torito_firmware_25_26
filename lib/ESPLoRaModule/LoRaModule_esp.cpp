@@ -53,27 +53,30 @@ bool LoRaModule::configure(uint8_t address, unsigned long band, uint8_t networkI
 
 String LoRaModule::sendATCommand(const char* command, unsigned long timeout) {
     String result = "";
+
     while (loraSerial->available()) {
         loraSerial->read();
     }
 
-    // record the AT command so any later "+ERR=" lines can be correlated
     _lastATCommand = String(command);
     loraSerial->println(command);
 
     unsigned long startTime = millis();
     unsigned long lastCharTime = millis();
+
     while (millis() - startTime < timeout) {
         if (loraSerial->available()) {
             char c = loraSerial->read();
             result += c;
             lastCharTime = millis();
-            if ((result.indexOf("OK") != -1 || result.indexOf("ERROR") != -1) && 
-                millis() - lastCharTime > 50) {
-                break;
-            }
+        }
+
+        if ((result.indexOf("OK") != -1 || result.indexOf("ERROR") != -1) &&
+            millis() - lastCharTime > 50) {
+            break;
         }
     }
+
     return result;
 }
 
