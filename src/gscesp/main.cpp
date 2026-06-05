@@ -27,13 +27,14 @@ String address = "";
 
 void setup() {
   Serial.begin(115200);
+  Serial.setTimeout(10);
   delay(100);
 
   if (!rxLora.begin()) {
-    Serial.println("RX LoRa init failed");
+    // Serial.println("RX LoRa init failed");
   }
   if (!txLora.begin()) {
-    Serial.println("TX LoRa init failed");
+    // Serial.println("TX LoRa init failed");
   }
 
   rxLora.configure(RX_MODULE_ADDRESS, RX_MODULE_BAND, LORA_NETWORK_ID);
@@ -41,12 +42,6 @@ void setup() {
 }
 
 void loop() {
-  String incomingHex;
-  if (rxLora.receiveData(incomingHex)) {
-    parseReceivedPayload(incomingHex);
-  }
-  delay(10);
-
   checkUserInput();
 
   static unsigned long lastRepeatMillis = 0;
@@ -59,7 +54,7 @@ void loop() {
       if (millis() - lastRepeatMillis >= 1000) {
         lastRepeatMillis = millis();
         flipState = !flipState;
-        lora_input = flipState ? "fe00" : "8000";
+        lora_input = flipState ? "FE00" : "8000";
         doSend = true;
       } else {
         doSend = false;
@@ -76,7 +71,10 @@ void loop() {
     }
   }
 
-  delay(10);
+  String incomingHex;
+  if (rxLora.receiveData(incomingHex)) {
+    parseReceivedPayload(incomingHex);
+  }
 }
 
 void parseReceivedPayload(const String& hexPayload) {
@@ -113,7 +111,7 @@ void checkUserInput() {
         if (colonIndex != -1) {
           userInput = userInput.substring(0, colonIndex);
           reporting_lock = true;
-          Serial.println("Repeat mode enabled");
+          // Serial.println("Repeat mode enabled");
         }
       } else {
         reporting_lock = false;
@@ -124,18 +122,48 @@ void checkUserInput() {
         lora_input = userInput.substring(0, commaIndex);
         address = userInput.substring(commaIndex + 1);
       } else {
-        Serial.println("ERROR: Invalid format. Use: <command>,<address>");
+        // Serial.println("ERROR: Invalid format. Use: <command>,<address>");
       }
     }
   }
 }
 
 void send_command(String inputString, String address, LoRaModule& module) {
-  const long addressInt = address.toInt();
-  if (addressInt < 0 || addressInt > 255) {
+  inputString.trim();
+  address.trim();
+
+  if (inputString.startsWith("0x") || inputString.startsWith("0X")) {
+    inputString = inputString.substring(2);
+  }
+
+  inputString.toUpperCase();
+
+  if (inputString.length() == 0 || (inputString.length() % 2) != 0) {
+    // Serial.println("ERROR: Command hex length must be even");
     return;
   }
 
-  module.sendData(static_cast<uint8_t>(addressInt), inputString);
-  delay(100);
+  for (uint16_t i = 0; i < inputString.length(); i++) {
+    if (!isxdigit(inputString[i])) {
+      // Serial.println("ERROR: Command contains non-hex character");
+      return;
+    }
+  }
+
+  const long addressInt = address.toInt();
+  if (addressInt < 0 || addressInt > 255) {
+    // Serial.println("ERROR: Invalid LoRa destination address");
+    return;
+  }
+
+  bool ok = module.sendData(static_cast<uint8_t>(addressInt), inputString);
+
+  // Serial.print("[TX] addr=");
+  // Serial.print(addressInt);
+  // Serial.print(" data=");
+  // Serial.print(inputString);
+  // Serial.print(" bytes=");
+  // Serial.print(inputString.length() / 2);
+  // Serial.print(" result=");
+  // Serial.println(ok ? "OK" : "FAIL");
 }

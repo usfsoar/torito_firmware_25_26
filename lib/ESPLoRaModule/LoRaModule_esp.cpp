@@ -80,9 +80,12 @@ String LoRaModule::sendATCommand(const char* command, unsigned long timeout) {
     return result;
 }
 
-bool LoRaModule::sendData(uint8_t destAddress, String hexData) {
+bool LoRaModule::sendData(uint8_t destAddress, String data) {
+    data.trim();
+
     char cmd[100];
-    sprintf(cmd, "AT+SEND=%d,%d,%s", destAddress, hexData.length() / 2, hexData.c_str());
+    sprintf(cmd, "AT+SEND=%d,%d,%s", destAddress, data.length(), data.c_str());
+
     String response = sendATCommand(cmd, 2000);
     return response.indexOf("OK") != -1;
 }
@@ -103,13 +106,13 @@ bool LoRaModule::receiveData(String& hexData) {
     // Read with timeout
     unsigned long startTime = millis();
     unsigned long lastCharTime = millis();
-    while (millis() - startTime < 1000) {
+    while (millis() - startTime < 50) {
         if (loraSerial->available()) {
             char c = loraSerial->read();
             if (c == '\n') break;
             incomingString += c;
             lastCharTime = millis();
-        } else if (millis() - lastCharTime > 50) {
+        } else if (millis() - lastCharTime > 10) {
             // No data for 50ms, likely complete
             break;
         }
